@@ -22,6 +22,6 @@ sequelize.sync({ alter: true})
     .then(() => {
         console.log("Category table is created")
     })
-    .catch(err => console.error("❌ Error creating User table:", err));
+    .catch(err => console.error("❌ Error creating category table:", err));
 
 module.exports = Category;
