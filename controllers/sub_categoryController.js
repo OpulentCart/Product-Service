@@ -30,8 +30,9 @@ exports.getSubCategories = async (req, res) => {
 
 exports.updateSubCategory = async(req, res) => {
     try{
-        const { sub_category_id, name } = req.body;
-        await subCategory.update({ name: name}, {where: {sub_category_id: sub_category_id}}); 
+        const { name } = req.body;
+        const { id } = req.params;
+        await subCategory.update({ name: name}, {where: {sub_category_id: id}}); 
         return res.status(201).json({
             success: true,
             message: "Updates are applied"
@@ -47,8 +48,8 @@ exports.updateSubCategory = async(req, res) => {
 
 exports.deleteSubCategory = async(req, res) => {
     try{
-        const { sub_category_id } = req.body;
-        await subCategory.destroy({ sub_category_id: sub_category_id});
+        const { id } = req.params;
+        await subCategory.destroy({ sub_category_id: id});
         return res.status(201).json({
             success: true,
             message: "Sub-category deleted successfully"

@@ -4,7 +4,7 @@ const subCategoryController = require("../controllers/sub_categoryController");
 
 router.post("/create", subCategoryController.createSubCategory);
 router.get("/", subCategoryController.getSubCategories);
-router.put("/", subCategoryController.updateSubCategory);
-router.delete("/", subCategoryController.deleteSubCategory);
+router.put("/:id", subCategoryController.updateSubCategory);
+router.delete("/:id", subCategoryController.deleteSubCategory);
 
 module.exports = router;

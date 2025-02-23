@@ -35,8 +35,9 @@ exports.getCategories = async (req, res) => {
 
 exports.updateCategory = async(req, res) => {
     try{
-        const { category_id, name } = req.body;
-        await Category.update({ name: name}, {where: {category_id: category_id}}); 
+        const { name } = req.body;
+        const { id } = req.params;
+        await Category.update({ name: name}, {where: {category_id: id}}); 
         return res.status(201).json({
             success: true,
             message: "Updates are applied"
@@ -52,8 +53,8 @@ exports.updateCategory = async(req, res) => {
 
 exports.deleteCategory = async(req, res) => {
     try{
-        const { category_id } = req.body;
-        await Category.destroy({ category_id: category_id});
+        const { id } = req.params;
+        await Category.destroy({ category_id: id});
         return res.status(201).json({
             success: true,
             message: "Category deleted successfully"
