@@ -28,7 +28,7 @@ const subCategory = sequelize.define('subCategory', {
     timestamps: true
 });
 
-Category.hasMany(subCategory, {foreignKey: 'categorY_id', onDelete: 'CASCADE'});
+Category.hasMany(subCategory, {foreignKey: 'category_id', onDelete: 'CASCADE'});
 subCategory.belongsTo(Category, { foreignKey: 'category_id' });
 
 // sync model with database

@@ -12,7 +12,7 @@ app.use(cors());
 connectDB();
 
 app.use("/categories", require("./routes/categoryRoutes"));
-app.use("/subcategories", require("./routes/subCategoryRoutes"));
+app.use("/subcategories", require("./routes/sub_categoryRoutes"));
 // app.use("/products", require("./routes/productRoutes"));
 // app.use("/category-discounts", require("./routes/categoryDiscountRoutes"));
 
