@@ -101,6 +101,26 @@ exports.updateProductStatus = async (req, res) => {
     }
 };
 
+exports.getTotalProducts = async (req, res) => {
+    try{
+        const countProducts = await Product.count();
+        return res.status(200).json({
+            success: true,
+            total_products: countProducts
+        });
+    }catch(error){
+        console.error("Error in counting the number of products", error.message);
+        return res.status(500).json({
+            success: "false",
+            message: "Failed in counting the total Products"
+        });
+    }
+};
+
+exports.getVendorIdByProductId = async (req, res) => {
+
+};
+
 // exports.updateProductStock = async(req, res) => {
 
 // };
