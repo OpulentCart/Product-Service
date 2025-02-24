@@ -46,11 +46,11 @@ const Product = sequelize.define('Product', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    cover_image: {
+    main_image: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
-    sub_images: {
+    cover_images: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true
     },
