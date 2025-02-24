@@ -101,6 +101,6 @@ exports.updateProductStatus = async (req, res) => {
     }
 };
 
-exports.updateProductStock = async(req, res) => {
+// exports.updateProductStock = async(req, res) => {
 
-};
+// };
