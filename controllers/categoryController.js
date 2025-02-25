@@ -67,3 +67,19 @@ exports.deleteCategory = async(req, res) => {
         });
     }
 };
+
+exports.getTotalCategoryCount = async (req, res) => {
+    try{
+        const totalCategory = await Category.count();
+        return res.status(200).json({
+            success: true,
+            totalCategory
+        });
+    }catch(error){
+        console.error("Error in getting count of Categories", error.message);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to get total count of Categories"
+        });
+    }
+};
