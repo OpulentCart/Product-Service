@@ -17,6 +17,7 @@ connectDB();
 app.use("/categories", require("./routes/categoryRoutes"));
 app.use("/subcategories", require("./routes/sub_categoryRoutes"));
 app.use("/products", require("./routes/productRoutes"));
+app.use("/wishlist", require("./routes/wishlistRoutes"));
 // app.use("/category-discounts", require("./routes/categoryDiscountRoutes"));
 
 app.listen(process.env.PORT, () => console.log(`Product Service running on port ${process.env.PORT}`));
