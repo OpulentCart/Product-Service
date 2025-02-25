@@ -101,7 +101,7 @@ exports.updateProductStatus = async (req, res) => {
     }
 };
 
-exports.getTotalProducts = async (req, res) => {
+exports.getTotalProductsCount = async (req, res) => {
     try{
         const countProducts = await Product.count();
         return res.status(200).json({
@@ -146,6 +146,7 @@ exports.getAllProductsForCustomer = async (req, res) => {
         });
     }
 };
+
 // exports.updateProductStock = async(req, res) => {
 
 // };
