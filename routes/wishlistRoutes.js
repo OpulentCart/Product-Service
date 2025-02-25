@@ -10,6 +10,6 @@ router.get('/', authenticateUser, authorizeRole('customer'),wishlistController.g
 router.post('/', authenticateUser, authorizeRole('user'), wishlistController.addToWishlist);
 
 // Remove product from the wishlist
-router.delete('/:wishlist_id', wishlistController.removeFromWishlist);
+router.delete('/:wishlist_id', authenticateUser, authorizeRole('user'), wishlistController.removeFromWishlist);
 
 module.exports = router;
