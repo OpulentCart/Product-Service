@@ -139,7 +139,7 @@ exports.getAllProductsForCustomer = async (req, res) => {
             products
         });
     }catch(error){
-        console.error("Error in getting all products for the customers", error);
+        console.error("Error in getting all products for the customers", error.message);
         return res.status(500).json({
             success: false,
             message: "Failed to get all Products for customers"

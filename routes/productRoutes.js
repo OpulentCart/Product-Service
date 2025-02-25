@@ -9,6 +9,6 @@ router.get('/category/:id', productController.getAllProductsByCategory);
 router.get('/sub_category/:id', productController.getAllProductsBySubCategory);
 router.put('/:id', productController.updateProductStatus);
 router.get('/:id', productController.getAllProductsOfVendor);
-router.get('/customer', authenticateUser , authorizeRole('customer'), productController.getAllProductsForCustomer);
+router.get('/customer/products', authenticateUser , authorizeRole('customer'), productController.getAllProductsForCustomer);
 
 module.exports = router;
