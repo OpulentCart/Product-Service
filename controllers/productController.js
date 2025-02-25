@@ -222,7 +222,7 @@ exports.getProductById = async (req, res) => {
 
 exports.getAllProductsByCategoryForCustomers = async (req, res) => {
     try{
-        const { id } = req.body;
+        const { id } = req.params;
         const products = await Product.findOne(
             { where: { category_id: id, status: 'approved' }},
             { attributes: ["product_id", "name", "brand", "description", "main_image", "cover_images", "likes", "is_bestseller" ]}
@@ -242,7 +242,7 @@ exports.getAllProductsByCategoryForCustomers = async (req, res) => {
 
 exports.getAllProductsBySubCategoryForCustomers = async (req, res) => {
     try{
-        const { id } = req.body;
+        const { id } = req.params;
         const products = await Product.findOne(
             { where: { sub_category_id: id, status: 'approved' }},
             { attributes: ["product_id", "name", "brand", "description", "main_image", "cover_images", "likes", "is_bestseller" ]}
