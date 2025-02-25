@@ -147,6 +147,23 @@ exports.getAllProductsForCustomer = async (req, res) => {
     }
 };
 
+// get product details by product id
+exports.getProductById = async (req, res) => {
+    try{
+        const { id } = req.params;
+        const product = await Product.findOne({ where: { product_id: id }});
+        return res.status(200).json({
+            success: true,
+            product
+        }); 
+    }catch(error){
+        console.error("Error in getting product details by product id", error.message);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to get Product Details by product id"
+        });
+    }
+};
 // exports.updateProductStock = async(req, res) => {
 
 // };
