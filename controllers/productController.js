@@ -111,16 +111,41 @@ exports.getTotalProducts = async (req, res) => {
     }catch(error){
         console.error("Error in counting the number of products", error.message);
         return res.status(500).json({
-            success: "false",
+            success: false,
             message: "Failed in counting the total Products"
         });
     }
 };
 
 exports.getVendorIdByProductId = async (req, res) => {
+    try{
+        const { product_id } = req.body;
+        const vendor_id = await Product.findOne()
 
+    }catch(error){
+        console.error("Error in returning Vendor id by product id", error.message);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to retrieve vendor id by project id"
+        });
+    }
 };
 
+exports.getAllProductsForCustomer = async (req, res) => {
+    try{
+        const products = await Product.findAll({ where: {status: 'approved'}});
+        return res.status(200).json({
+            success: true,
+            products
+        });
+    }catch(error){
+        console.error("Error in getting all products for the customers", error);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to get all Products for customers"
+        });
+    }
+};
 // exports.updateProductStock = async(req, res) => {
 
 // };
