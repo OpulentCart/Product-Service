@@ -62,3 +62,19 @@ exports.deleteSubCategory = async(req, res) => {
         });
     }
 };
+
+exports.getTotalSubCategoriesCount = async(req, res) => {
+  try{
+    const totalSubCategories = await SubCategory.count();
+    return res.status(200).json({
+      success: true,
+      totalSubCategories
+    });
+  } catch(error){
+    console.error("Error in getting total count of sub-categories", error.message);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to get the total count of sub-categories'
+    });
+  }                             
+};

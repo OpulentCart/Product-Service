@@ -7,6 +7,6 @@ router.post("/create", categoryController.createCategory);
 router.get("/", categoryController.getCategories);
 router.put("/:id", categoryController.updateCategory);
 router.delete("/:id", categoryController.deleteCategory);
-router.get("/count/category", authenticateUser, authorizeRole('admin'), categoryController.getTotalCategoryCount);
+router.get("/count/categories", authenticateUser, authorizeRole('admin'), categoryController.getTotalCategoryCount);
 
 module.exports = router;
