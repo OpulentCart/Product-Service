@@ -38,7 +38,7 @@ exports.addToWishlist = async(req, res) => {
         if (existingItem) {
             return res.status(400).json({ success: false, message: "Product already in wishlist" });
         }
-        
+
         // Add to wishlist
         const wishlistItem = await Wishlist.create({ user_id, product_id });
 
@@ -50,5 +50,23 @@ exports.addToWishlist = async(req, res) => {
             success: false,
             message: 'Failed to add-product in to the wishlist'
         });
+    }
+};
+
+// Remove Item from wishlist
+exports.removeFromWishlist = async (req, res) => {
+    try {
+        const { wishlist_id } = req.params;
+
+        const deleted = await Wishlist.destroy({ where: { wishlist_id } });
+
+        if (!deleted) {
+            return res.status(404).json({ success: false, message: "Wishlist item not found" });
+        }
+
+        return res.status(200).json({ success: true, message: "Item removed from wishlist" });
+    } catch (error) {
+        console.error("Error in removing item from wishlist", error.message);
+        res.status(500).json({ success: false, message: "Server Error" });
     }
 };
