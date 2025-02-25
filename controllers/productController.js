@@ -1,11 +1,16 @@
 const Product = require('../models/product');
+const uploadToCloudinary = require('../services/cloudinaryService');
 
 exports.createProduct = async (req, res) => {
     try {
         const { vendor_id, category_id, sub_category_id, name, brand, description, likes, stock } = req.body;
          // Check if files are present
          console.log("Files Received: ", req.files);
-
+         const vendorId = parseInt(vendor_id, 10);
+         const categoryId = parseInt(category_id, 10);
+         const subCategoryId = parseInt(sub_category_id, 10);
+         const Likes = parseInt(likes, 10);
+         const Stocks = parseInt(stock, 10);
          if (!req.files || !req.files.main_image) {
             return res.status(400).json({ 
                 success: false, 
@@ -29,6 +34,19 @@ exports.createProduct = async (req, res) => {
             const uploadedImages = await Promise.all(uploadPromises);
             cover_images_urls = uploadedImages.map(img => img.secure_url);
         }
+        console.log("Product Data:", {
+            vendor_id: vendorId, 
+            category_id: categoryId, 
+            sub_category_id: subCategoryId, 
+            name, 
+            brand, 
+            description, 
+            main_image: main_image_url,
+            cover_images: cover_images_urls, 
+            likes: Likes, 
+            stock: Stocks
+        });
+        
 
         const product = await Product.create({ 
             vendor_id, 

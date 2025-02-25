@@ -1,12 +1,15 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
+const fileUpload = require("express-fileupload");
 const { connectDB } = require("./config/dbConfig");
 require("dotenv").config();
 
+app.use(fileUpload());
 // middleware
 app.use(express.json());
 app.use(cors());
+
 
 // connect to the database
 connectDB();
