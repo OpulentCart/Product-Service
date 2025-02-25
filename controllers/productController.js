@@ -223,7 +223,10 @@ exports.getProductById = async (req, res) => {
 exports.getAllProductsByCategoryForCustomers = async (req, res) => {
     try{
         const { id } = req.body;
-        const products = await Product.findOne({ where: { product_id: id, status: 'approved' }});
+        const products = await Product.findOne(
+            { where: { category_id: id, status: 'approved' }},
+            { attributes: ["product_id", "name", "brand", "description", "main_image", "cover_images", "likes", "is_bestseller" ]}
+        );
         return res.status(200).json({
             success: true,
             products
@@ -240,7 +243,10 @@ exports.getAllProductsByCategoryForCustomers = async (req, res) => {
 exports.getAllProductsBySubCategoryForCustomers = async (req, res) => {
     try{
         const { id } = req.body;
-        const products = await Product.findOne({ where: { product_id: id, status: 'approved' }});
+        const products = await Product.findOne(
+            { where: { sub_category_id: id, status: 'approved' }},
+            { attributes: ["product_id", "name", "brand", "description", "main_image", "cover_images", "likes", "is_bestseller" ]}
+        );
         return res.status(200).json({
             success: true,
             products
