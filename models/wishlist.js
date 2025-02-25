@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/dbConfig');
+const Product = require('./product');
 
 const Wishlist = sequelize.define('Wishlist', {
     wishlist_id: {
@@ -30,6 +31,7 @@ const Wishlist = sequelize.define('Wishlist', {
     timestamps: true
 });
 
+Wishlist.belongsTo(Product, { foreignKey: 'product_id', as: 'product' });
 
 // sync model with database
 sequelize.sync({ alter: true})
