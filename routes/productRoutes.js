@@ -4,7 +4,7 @@ const productController = require('../controllers/productController');
 const { authenticateUser, authorizeRole} = require('../middleware/authMiddleware');
 
 router.post('/create', productController.createProduct);
-router.get('/admin', productController.getAllProducts);
+router.get('/admin/products', productController.getAllProducts);
 router.get('/category/:id', productController.getAllProductsByCategory);
 router.get('/sub_category/:id', productController.getAllProductsBySubCategory);
 router.put('/:id', productController.updateProductStatus);
