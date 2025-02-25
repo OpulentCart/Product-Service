@@ -2,8 +2,45 @@ const Product = require('../models/product');
 
 exports.createProduct = async (req, res) => {
     try {
-        const { vendor_id, category_id, sub_category_id, name, brand, description, cover_image, sub_image, likes, stock } = req.body;
-        const product = await Product.create({ vendor_id, category_id, sub_category_id, name, brand, description, cover_image, sub_image, likes, stock });
+        const { vendor_id, category_id, sub_category_id, name, brand, description, likes, stock } = req.body;
+         // Check if files are present
+         console.log("Files Received: ", req.files);
+
+         if (!req.files || !req.files.main_image) {
+            return res.status(400).json({ 
+                success: false, 
+                message: "Main image is required" 
+            });
+        }
+
+        // Upload main image to Cloudinary
+        const mainImageResult = await uploadToCloudinary(req.files.main_image.data, "products");
+        const main_image_url = mainImageResult.secure_url;
+        
+        // Upload cover images if provided
+        let cover_images_urls = [];
+        if (req.files.cover_images) {
+            const coverImageFiles = Array.isArray(req.files.cover_images) ? req.files.cover_images : [req.files.cover_images];
+
+            const uploadPromises = coverImageFiles.map(imageFile =>
+                uploadToCloudinary(imageFile.data, "products")
+            );
+
+            const uploadedImages = await Promise.all(uploadPromises);
+            cover_images_urls = uploadedImages.map(img => img.secure_url);
+        }
+
+        const product = await Product.create({ 
+            vendor_id, 
+            category_id, 
+            sub_category_id, 
+            name, 
+            brand, 
+            description, 
+            main_image: main_image_url,
+            cover_images: cover_images_urls, 
+            likes, 
+            stock });
         res.status(201).json({
             success: true,
             message: "New Product is added successfully"
