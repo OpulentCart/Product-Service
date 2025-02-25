@@ -219,6 +219,41 @@ exports.getProductById = async (req, res) => {
         });
     }
 };
+
+exports.getAllProductsByCategoryForCustomers = async (req, res) => {
+    try{
+        const { id } = req.body;
+        const products = await Product.findOne({ where: { product_id: id, status: 'approved' }});
+        return res.status(200).json({
+            success: true,
+            products
+        }); 
+    }catch(error){
+        console.error("Error in getting Products by Category for Customers", error.message);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to get Products by Category for Customers"
+        });
+    }
+};
+
+exports.getAllProductsBySubCategoryForCustomers = async (req, res) => {
+    try{
+        const { id } = req.body;
+        const products = await Product.findOne({ where: { product_id: id, status: 'approved' }});
+        return res.status(200).json({
+            success: true,
+            products
+        }); 
+    }catch(error){
+        console.error("Error in getting Products by sub-category for Customers", error.message);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to get Products by sub-category for Customers"
+        });
+    }
+};
+
 // exports.updateProductStock = async(req, res) => {
 
 // };
