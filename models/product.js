@@ -83,6 +83,10 @@ const Product = sequelize.define('Product', {
     is_bestseller: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
+    },
+    availability_status: {
+        type: DataTypes.ENUM('in-stock', 'out-of-stock'),
+        allowNull: false
     }
 }, {
     tableName: 'product',
