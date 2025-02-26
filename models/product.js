@@ -63,6 +63,14 @@ const Product = sequelize.define('Product', {
         allowNull: false,
         defaultValue: 0
     },
+    ratings: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+        validate: {
+            min: 0,
+            max: 5
+        }
+    }, 
     stock: {
         type: DataTypes.INTEGER,
         allowNull: false,
