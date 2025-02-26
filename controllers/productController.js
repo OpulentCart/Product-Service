@@ -3,7 +3,7 @@ const uploadToCloudinary = require('../services/cloudinaryService');
 
 exports.createProduct = async (req, res) => {
     try {
-        const { vendor_id, category_id, sub_category_id, name, brand, description, likes, stock } = req.body;
+        const { vendor_id, category_id, sub_category_id, name, brand, description, likes, stock, price, ratings } = req.body;
          // Check if files are present
          console.log("Files Received: ", req.files);
          const vendorId = parseInt(vendor_id, 10);
@@ -11,6 +11,8 @@ exports.createProduct = async (req, res) => {
          const subCategoryId = parseInt(sub_category_id, 10);
          const Likes = parseInt(likes, 10);
          const Stocks = parseInt(stock, 10);
+         const Price = parseInt(price, 10);
+         const Ratings = parseInt(ratings, 10);
          if (!req.files || !req.files.main_image) {
             return res.status(400).json({ 
                 success: false, 
@@ -44,7 +46,9 @@ exports.createProduct = async (req, res) => {
             main_image: main_image_url,
             cover_images: cover_images_urls, 
             likes: Likes, 
-            stock: Stocks
+            stock: Stocks,
+            price: Price,
+            ratings: Ratings
         });
         
 
@@ -58,7 +62,10 @@ exports.createProduct = async (req, res) => {
             main_image: main_image_url,
             cover_images: cover_images_urls, 
             likes, 
-            stock });
+            stock,
+            price,
+            ratings
+        });
         res.status(201).json({
             success: true,
             message: "New Product is added successfully"
