@@ -7,9 +7,9 @@ const { authenticateUser, authorizeRole } = require('../middleware/authMiddlewar
 router.get('/', authenticateUser, authorizeRole('customer'),wishlistController.getWishlist);
 
 // Add Product to wishlist
-router.post('/', authenticateUser, authorizeRole('user'), wishlistController.addToWishlist);
+router.post('/', authenticateUser, authorizeRole('customer'), wishlistController.addToWishlist);
 
 // Remove product from the wishlist
-router.delete('/:wishlist_id', authenticateUser, authorizeRole('user'), wishlistController.removeFromWishlist);
+router.delete('/:wishlist_id', authenticateUser, authorizeRole('customer'), wishlistController.removeFromWishlist);
 
 module.exports = router;

@@ -141,7 +141,8 @@ exports.getAllProductsOfVendor = async (req, res) => {
 
 exports.updateProductStatus = async (req, res) => {
     try{
-        const { id, status } = req.body;
+        const { status } = req.body;
+        const { id } = req.params;
         const updatedProduct = await Product.update({ status: status}, { where: { product_id: id }});
         return res.status(200).json({
             success: true,
