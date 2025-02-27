@@ -16,15 +16,6 @@ const Product = sequelize.define('Product', {
         },
         onDelete: 'CASCADE'
     },
-    category_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'category',
-            key: 'category_id'
-        },
-        onDelete: 'CASCADE'
-    },
     sub_category_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -58,24 +49,6 @@ const Product = sequelize.define('Product', {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true
     },
-    likes: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0
-    },
-    ratings: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-        validate: {
-            min: 0,
-            max: 5
-        }
-    }, 
-    stock: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0
-    },
     status: {
         type: DataTypes.ENUM('pending', 'approved', 'rejected'),
         defaultValue: 'pending'
@@ -83,10 +56,6 @@ const Product = sequelize.define('Product', {
     is_bestseller: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
-    },
-    availability_status: {
-        type: DataTypes.ENUM('in-stock', 'out-of-stock'),
-        allowNull: false
     }
 }, {
     tableName: 'product',
@@ -94,7 +63,7 @@ const Product = sequelize.define('Product', {
 });
 
 // sync model with database
-sequelize.sync({ alter: true})
+sequelize.sync()
     .then(() => {
         console.log("Product table is created")
     })

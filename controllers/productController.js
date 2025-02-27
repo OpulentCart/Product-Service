@@ -3,23 +3,20 @@ const uploadToCloudinary = require('../services/cloudinaryService');
 
 exports.createProduct = async (req, res) => {
     try {
-        const { vendor_id, category_id, sub_category_id, name, brand, description, likes, stock, price, ratings } = req.body;
+        const { vendor_id, sub_category_id, name, brand, description, stock, price} = req.body;
          // Check if files are present
         //console.log("Files Received: ", req.files);
          const vendorId = parseInt(vendor_id, 10);
-         const categoryId = parseInt(category_id, 10);
          const subCategoryId = parseInt(sub_category_id, 10);
-         const Likes = parseInt(likes, 10);
          const Stocks = parseInt(stock, 10);
-         const Price = parseInt(price, 10);
-         const Ratings = parseInt(ratings, 10);
+         price = parseInt(price, 10);
          const availability_status = (Stocks > 0) ? 'in-stock' : 'out-of-stock'; 
          if (!req.files || !req.files.main_image) {
             return res.status(400).json({ 
                 success: false, 
                 message: "Main image is required" 
             });
-        }
+         }
 
         // Upload main image to Cloudinary
         const mainImageResult = await uploadToCloudinary(req.files.main_image.data, "products");
@@ -39,20 +36,17 @@ exports.createProduct = async (req, res) => {
         }
         
         const product = await Product.create({ 
-            vendor_id, 
-            category_id, 
-            sub_category_id, 
+            vendor_id: vendorId, 
+            sub_category_id: subCategoryId, 
             name, 
             brand, 
+            price,
             description, 
             main_image: main_image_url,
-            cover_images: cover_images_urls, 
-            likes, 
-            stock,
-            price,
-            ratings,
-            availability_status: availability_status
+            cover_images: cover_images_urls,  
+            status: 'approved',
         });
+       // const productStoc
         res.status(201).json({
             success: true,
             message: "New Product is added successfully"
