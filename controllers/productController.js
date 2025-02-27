@@ -79,7 +79,16 @@ exports.getAllProducts = async (req, res) => {
 exports.getAllProductsByCategory = async (req, res) => {
     try{
         const { id } = req.params;
-        const products = await Product.findAll({ where: { category_id: id}});
+        const products = await Product.findOne({ 
+            attributes: ["product_id", "name", "brand", "description", "main_image", "cover_images", "price", "is_bestseller" ],
+            include: [
+                {
+                    model: 'sub_category',
+                    attributes: [],
+                    where: { category_id: id }
+                }
+            ]
+        });
         return res.status(200).json({
             success: true,
             products
@@ -214,7 +223,7 @@ exports.getAllProductsByCategoryForCustomers = async (req, res) => {
         const { id } = req.params;
         const products = await Product.findOne(
             { where: { category_id: id, status: 'approved' }},
-            { attributes: ["product_id", "name", "brand", "description", "main_image", "cover_images", "likes", "is_bestseller" ]}
+            { attributes: ["product_id", "name", "brand", "price", "description", "main_image", "cover_images", "is_bestseller" ]}
         );
         return res.status(200).json({
             success: true,
@@ -232,10 +241,17 @@ exports.getAllProductsByCategoryForCustomers = async (req, res) => {
 exports.getAllProductsBySubCategoryForCustomers = async (req, res) => {
     try{
         const { id } = req.params;
-        const products = await Product.findOne(
-            { where: { sub_category_id: id, status: 'approved' }},
-            { attributes: ["product_id", "name", "brand", "description", "main_image", "cover_images", "likes", "is_bestseller" ]}
-        );
+        const products = await Product.findOne({ 
+            where: { status: 'approved' },
+            attributes: ["product_id", "name", "brand", "description", "main_image", "cover_images", "price", "is_bestseller" ],
+            include: [
+                {
+                    model: 'sub_category',
+                    attributes: [],
+                    where: { category_id: id }
+                }
+            ]
+        });
         return res.status(200).json({
             success: true,
             products
