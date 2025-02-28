@@ -7,12 +7,8 @@ exports.createProduct = async (req, res) => {
     try {
         const { vendor_id, sub_category_id, name, brand, description, stock, price} = req.body;
          // Check if files are present
-        //console.log("Files Received: ", req.files);
-         const vendorId = parseInt(vendor_id, 10);
-         const subCategoryId = parseInt(sub_category_id, 10);
-         const Stocks = parseInt(stock, 10);
-         const Price = parseInt(price, 10);
-         const availability_status = (Stocks > 0) ? 'in-stock' : 'out-of-stock'; 
+        //console.log("Files Received: ", req.files)
+         const availability_status = (stock > 0) ? 'in-stock' : 'out-of-stock'; 
          if (!req.files || !req.files.main_image) {
             return res.status(400).json({ 
                 success: false, 
@@ -38,22 +34,21 @@ exports.createProduct = async (req, res) => {
         }
         
         const product = await Product.create({ 
-            vendor_id: vendorId, 
-            sub_category_id: subCategoryId, 
+            vendor_id, 
+            sub_category_id, 
             name, 
             brand, 
-            price: Price,
+            price,
             description, 
             main_image: main_image_url,
             cover_images: cover_images_urls,  
-            status: 'approved',
+            status: 'pending',
         });
         const productStock = await ProductStock.create({
             product_id: product.product_id,
-            stock: Stocks,
+            stock: stock,
             availability_status
         });
-       // const productStoc
         res.status(201).json({
             success: true,
             message: "New Product is added successfully"
