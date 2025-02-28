@@ -1,4 +1,6 @@
 const Product = require('../models/product');
+const SubCategory = require('../models/sub_category');
+const ProductStock = require('../models/product_stock');
 const uploadToCloudinary = require('../services/cloudinaryService');
 
 exports.createProduct = async (req, res) => {
@@ -46,6 +48,11 @@ exports.createProduct = async (req, res) => {
             cover_images: cover_images_urls,  
             status: 'approved',
         });
+        const productStock = await ProductStock.create({
+            product_id: product.product_id,
+            stock: Stocks,
+            availability_status
+        });
        // const productStoc
         res.status(201).json({
             success: true,
@@ -83,7 +90,7 @@ exports.getAllProductsByCategory = async (req, res) => {
             attributes: ["product_id", "name", "brand", "description", "main_image", "cover_images", "price", "is_bestseller" ],
             include: [
                 {
-                    model: 'sub_category',
+                    model: SubCategory,
                     attributes: [],
                     where: { category_id: id }
                 }
@@ -221,10 +228,17 @@ exports.getProductById = async (req, res) => {
 exports.getAllProductsByCategoryForCustomers = async (req, res) => {
     try{
         const { id } = req.params;
-        const products = await Product.findOne(
-            { where: { category_id: id, status: 'approved' }},
-            { attributes: ["product_id", "name", "brand", "price", "description", "main_image", "cover_images", "is_bestseller" ]}
-        );
+        const products = await Product.findOne({ 
+            where: { status: 'approved' },
+            attributes: ["product_id", "name", "brand", "description", "main_image", "cover_images", "price", "is_bestseller" ],
+            include: [
+                {
+                    model: SubCategory,
+                    attributes: [],
+                    where: { category_id: id }
+                }
+            ]
+        });
         return res.status(200).json({
             success: true,
             products
@@ -242,15 +256,8 @@ exports.getAllProductsBySubCategoryForCustomers = async (req, res) => {
     try{
         const { id } = req.params;
         const products = await Product.findOne({ 
-            where: { status: 'approved' },
+            where: { sub_category_id: id, status: 'approved' },
             attributes: ["product_id", "name", "brand", "description", "main_image", "cover_images", "price", "is_bestseller" ],
-            include: [
-                {
-                    model: 'sub_category',
-                    attributes: [],
-                    where: { category_id: id }
-                }
-            ]
         });
         return res.status(200).json({
             success: true,

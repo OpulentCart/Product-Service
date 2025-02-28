@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/dbConfig');
+const SubCategory = require("./sub_category");
 
 const Product = sequelize.define('Product', {
     product_id: {
@@ -62,6 +63,8 @@ const Product = sequelize.define('Product', {
     timestamps: true
 });
 
+Product.belongsTo(SubCategory, { foreignKey: "sub_category_id" }); // ✅ Define the association
+SubCategory.hasMany(Product, { foreignKey: "sub_category_id" });
 // sync model with database
 sequelize.sync()
     .then(() => {
