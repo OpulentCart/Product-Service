@@ -11,7 +11,7 @@ exports.createProduct = async (req, res) => {
          const vendorId = parseInt(vendor_id, 10);
          const subCategoryId = parseInt(sub_category_id, 10);
          const Stocks = parseInt(stock, 10);
-         price = parseInt(price, 10);
+         const Price = parseInt(price, 10);
          const availability_status = (Stocks > 0) ? 'in-stock' : 'out-of-stock'; 
          if (!req.files || !req.files.main_image) {
             return res.status(400).json({ 
@@ -42,7 +42,7 @@ exports.createProduct = async (req, res) => {
             sub_category_id: subCategoryId, 
             name, 
             brand, 
-            price,
+            price: Price,
             description, 
             main_image: main_image_url,
             cover_images: cover_images_urls,  
