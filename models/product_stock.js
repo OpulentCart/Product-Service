@@ -27,7 +27,7 @@ const ProductStock = sequelize.define('ProductStock', {
     },
 }, { 
     tableName: 'product_stock', 
-    timestamps: true 
+    timestamps: false
 });
 
 ProductStock.belongsTo(Product, { foreignKey: 'product_id', as: 'product' });
