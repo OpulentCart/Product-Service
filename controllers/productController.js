@@ -6,6 +6,7 @@ const uploadToCloudinary = require('../services/cloudinaryService');
 exports.createProduct = async (req, res) => {
     try {
         const { vendor_id, sub_category_id, name, brand, description, stock, price} = req.body;
+    
          // Check if files are present
         //console.log("Files Received: ", req.files)
          const availability_status = (stock > 0) ? 'in-stock' : 'out-of-stock'; 
