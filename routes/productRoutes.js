@@ -3,8 +3,8 @@ const router = express.Router();
 const productController = require('../controllers/productController');
 const { authenticateUser, authorizeRole} = require('../middleware/authMiddleware');
 
-router.post('/create', productController.createProduct);
-router.get('/admin/products', productController.getAllProducts);
+router.post('/create', authenticateUser, authorizeRole('vendor'), productController.createProduct);
+router.get('/admin/products', authenticateUser, authorizeRole("admin"), productController.getAllProducts);
 router.get('/category/:id', productController.getAllProductsByCategory);
 router.get('/sub_category/:id', productController.getAllProductsBySubCategory);
 router.put('/:id', authenticateUser, authorizeRole('admin'), productController.updateProductStatus);
