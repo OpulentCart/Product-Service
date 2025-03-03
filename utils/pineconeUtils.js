@@ -1,4 +1,4 @@
-const { Pinecone } = require('pinecone');
+const { Pinecone } = require('@pinecone-database/pinecone');
 const { SentenceTransformer } = require('sentence-transformers');
 //const { getPostgresConnection } = require('../config/db');
 

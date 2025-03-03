@@ -3,6 +3,7 @@ const cors = require("cors");
 const app = express();
 const fileUpload = require("express-fileupload");
 const { connectDB } = require("./config/dbConfig");
+const { connectRabbitMQ } = require("./config/rabbitmqConfig");
 require("dotenv").config();
 
 app.use(fileUpload());
@@ -13,6 +14,9 @@ app.use(cors());
 
 // connect to the database
 connectDB();
+
+// Connect to RabbitMQ
+connectRabbitMQ();
 
 app.use("/categories", require("./routes/categoryRoutes"));
 app.use("/subcategories", require("./routes/sub_categoryRoutes"));

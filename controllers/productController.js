@@ -2,7 +2,7 @@ const Product = require('../models/product');
 const SubCategory = require('../models/sub_category');
 const ProductStock = require('../models/product_stock');
 const uploadToCloudinary = require('../services/cloudinaryService');
-const { insertProductEmbedding } = require('../utils/pineconeUtils');
+
 const Category = require('../models/category');
 
 exports.createProduct = async (req, res) => {
