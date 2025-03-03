@@ -2,6 +2,8 @@ const Product = require('../models/product');
 const SubCategory = require('../models/sub_category');
 const ProductStock = require('../models/product_stock');
 const uploadToCloudinary = require('../services/cloudinaryService');
+const { insertProductEmbedding } = require('../utils/pineconeUtils');
+const Category = require('../models/category');
 
 exports.createProduct = async (req, res) => {
     try {
@@ -144,6 +146,21 @@ exports.updateProductStatus = async (req, res) => {
         const { status } = req.body;
         const { id } = req.params;
         const updatedProduct = await Product.update({ status: status}, { where: { product_id: id }});
+        
+        if (updatedProduct[0] > 0) {
+            // Fetch product details for embedding
+            const product = await Product.findOne({ where: { product_id: id } });
+
+            if (product) {
+                const { sub_category_id } = product;
+                const subCategory = await SubCategory.findOne({ where: { sub_category_id } });
+                const { category_id } = subCategory;
+                const category = await Category.findOne({ where: {category_id: category_id}});
+                // Insert product embedding into Pinecone
+                //const categoryName = await Category.find({ where: category_id: product})
+                await insertProductEmbedding(product, subCategory, category);
+            }
+        }
         return res.status(200).json({
             success: true,
             updatedProduct
