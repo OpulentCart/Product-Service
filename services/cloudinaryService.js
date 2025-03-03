@@ -1,4 +1,4 @@
-const streamifier = require("streamifier");
+const streamifier = require("streamifier"); // converts buffer stream into readable stream
 const cloudinary = require("../config/cloudinaryConfig");
 
 const uploadToCloudinary = (fileBuffer, folder) => {
