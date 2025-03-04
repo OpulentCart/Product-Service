@@ -2,6 +2,7 @@ const Product = require('../models/product');
 const SubCategory = require('../models/sub_category');
 const ProductStock = require('../models/product_stock');
 const uploadToCloudinary = require('../services/cloudinaryService');
+const { getChannel } = require("../config/rabbitmqConfig");
 
 const Category = require('../models/category');
 
@@ -52,6 +53,22 @@ exports.createProduct = async (req, res) => {
             stock: stock,
             availability_status
         });
+
+        // Send notifications to RabbitMQ
+        const channel = getChannel();
+        if (channel) {
+            const notification = {
+                user_id: 27,
+                title: `New Product`,
+                message: `A new Product has been created and is pending for Approval.`,
+            };
+
+            channel.sendToQueue("notifications", Buffer.from(JSON.stringify(notification)), { persistent: true });
+            console.log("📨 Sent notification to RabbitMQ:", notification);
+        } else {
+            console.error("❌ RabbitMQ channel not available");
+        }
+        
         res.status(201).json({
             success: true,
             message: "New Product is added successfully"
@@ -126,8 +143,8 @@ exports.getAllProductsBySubCategory = async (req, res) => {
 
 exports.getAllProductsOfVendor = async (req, res) => {
     try{
-        const { id } = req.params;
-        const products = await Product.findAll({ where: { vendor_id: id}});
+        const id = req.user.user_id;
+        const products = await Product.findAll({ where: { user_id: id}});
         return res.status(200).json({
             success: true,
             products
@@ -143,6 +160,7 @@ exports.getAllProductsOfVendor = async (req, res) => {
 
 exports.updateProductStatus = async (req, res) => {
     try{
+        const user_id = req.user.user_id;
         const { status } = req.body;
         const { id } = req.params;
         const updatedProduct = await Product.update({ status: status}, { where: { product_id: id }});
@@ -151,16 +169,22 @@ exports.updateProductStatus = async (req, res) => {
             // Fetch product details for embedding
             const product = await Product.findOne({ where: { product_id: id } });
 
-            if (product) {
-                const { sub_category_id } = product;
-                const subCategory = await SubCategory.findOne({ where: { sub_category_id } });
-                const { category_id } = subCategory;
-                const category = await Category.findOne({ where: {category_id: category_id}});
-                // Insert product embedding into Pinecone
-                //const categoryName = await Category.find({ where: category_id: product})
-                await insertProductEmbedding(product, subCategory, category);
+            // Send notifications to RabbitMQ
+            const channel = getChannel();
+            if (channel) {
+                const notification = {
+                    user_id: user_id,
+                    title: `Update: ${product.name}`,
+                    message: `Your Product '${product.name}' has been '${product.status}'.`,
+                };
+
+                channel.sendToQueue("notifications", Buffer.from(JSON.stringify(notification)), { persistent: true });
+                console.log("📨 Sent notification to RabbitMQ:", notification);
+            } else {
+                console.error("❌ RabbitMQ channel not available");
             }
         }
+                
         return res.status(200).json({
             success: true,
             updatedProduct
