@@ -8,7 +8,7 @@ router.get('/admin/products', authenticateUser, authorizeRole("admin"), productC
 router.get('/category/:id', productController.getAllProductsByCategory);
 router.get('/sub_category/:id', productController.getAllProductsBySubCategory);
 router.put('/:id', authenticateUser, authorizeRole('admin'), productController.updateProductStatus);
-router.get('/vendor/:id', productController.getAllProductsOfVendor);
+router.get('/vendor/', authenticateUser, authorizeRole('vendor'), productController.getAllProductsOfVendor);
 router.get('/customer/products', productController.getAllProductsForCustomer);
 router.get('/count/products', authenticateUser, authorizeRole('admin'), productController.getTotalProductsCount);
 router.get('/:id', authenticateUser, productController.getProductById);
