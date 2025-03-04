@@ -3,7 +3,8 @@ const SubCategory = require('../models/sub_category');
 const ProductStock = require('../models/product_stock');
 const uploadToCloudinary = require('../services/cloudinaryService');
 const { getChannel } = require("../config/rabbitmqConfig");
-
+//const { Sequelize, QueryTypes } = require("sequelize");
+const { sequelize } = require("../config/dbConfig");
 const Category = require('../models/category');
 
 exports.createProduct = async (req, res) => {
@@ -142,18 +143,31 @@ exports.getAllProductsBySubCategory = async (req, res) => {
 };
 
 exports.getAllProductsOfVendor = async (req, res) => {
-    try{
-        const id = req.user.user_id;
-        const products = await Product.findAll({ where: { user_id: id}});
+    try {
+        const user_id  = req.user.user_id;
+
+        const query = `
+            SELECT p.* 
+            FROM product p
+            INNER JOIN vendors v ON p.vendor_id = v.vendor_id
+            WHERE v.user_id = :user_id
+        `;
+
+        const [products] = await sequelize.query(query, {
+            replacements: { user_id },
+            type: sequelize.QueryTypes.SELECT
+        });
+
         return res.status(200).json({
             success: true,
             products
         });
-    }catch(error){
-        console.error('Error in returning all products of vendor', error.message);
-        res.status(500).json({ 
+
+    } catch (error) {
+        console.error("Error fetching vendor products:", error.message);
+        res.status(500).json({
             success: false,
-            error: error.message 
+            error: error.message
         });
     }
 };
