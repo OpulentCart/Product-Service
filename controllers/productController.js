@@ -153,9 +153,10 @@ exports.getAllProductsOfVendor = async (req, res) => {
             WHERE v.user_id = :user_id
         `;
 
-        const [products] = await sequelize.query(query, {
+        const products = await sequelize.query(query, {
             replacements: { user_id },
-            type: sequelize.QueryTypes.SELECT
+            type: sequelize.QueryTypes.SELECT,
+            raw: true
         });
 
         return res.status(200).json({
@@ -339,6 +340,6 @@ exports.getAllProductsBySubCategoryForCustomers = async (req, res) => {
     }
 };
 
-// exports.updateProductStock = async(req, res) => {
+exports.deleteProduct = async (req, res) => {
 
-// };
+};
