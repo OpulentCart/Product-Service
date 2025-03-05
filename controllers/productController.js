@@ -180,6 +180,22 @@ exports.updateProductStatus = async (req, res) => {
         const updatedProduct = await Product.update({ status: status}, { where: { product_id: id }});
         
         if (updatedProduct[0] > 0) {
+            const result = await sequelize.query(
+                `SELECT v.user_id 
+                 FROM vendors v 
+                 JOIN product p ON v.vendor_id = p.vendor_id 
+                 WHERE p.product_id = :productId`,
+                {
+                    replacements: { productId: id },
+                    type: sequelize.QueryTypes.SELECT,
+                }
+            );
+
+            if (result.length === 0) {
+                return res.status(404).json({ success: false, message: "Vendor not found for the product." });
+            }
+
+            const vendorUserId = result[0].user_id;
             // Fetch product details for embedding
             const product = await Product.findOne({ where: { product_id: id } });
 
@@ -187,7 +203,7 @@ exports.updateProductStatus = async (req, res) => {
             const channel = getChannel();
             if (channel) {
                 const notification = {
-                    user_id: user_id,
+                    user_id: vendorUserId,
                     title: `Update: ${product.name}`,
                     message: `Your Product '${product.name}' has been '${product.status}'.`,
                 };
