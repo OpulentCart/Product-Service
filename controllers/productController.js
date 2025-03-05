@@ -3,7 +3,7 @@ const SubCategory = require('../models/sub_category');
 const ProductStock = require('../models/product_stock');
 const uploadToCloudinary = require('../services/cloudinaryService');
 const { getChannel } = require("../config/rabbitmqConfig");
-//const { Sequelize, QueryTypes } = require("sequelize");
+const { Sequelize, QueryTypes } = require("sequelize");
 const { sequelize } = require("../config/dbConfig");
 const Category = require('../models/category');
 
@@ -340,6 +340,7 @@ exports.getAllProductsBySubCategoryForCustomers = async (req, res) => {
     }
 };
 
+// delete a product
 exports.deleteProduct = async (req, res) => {
     try {
         const { id } = req.params; 
@@ -359,3 +360,42 @@ exports.deleteProduct = async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 };
+
+// search the products
+exports.searchProducts = async(req, res) => {
+    try{
+        const { keyword } = req.query;
+        if (!keyword) {
+            return res.status(400).json({
+                success: false,
+                message: "Keyword is required for searching."
+            });
+        }
+        const query = `
+            SELECT p.*
+            FROM product p
+            INNER JOIN product_stock ps ON p.id = ps.product_id
+            WHERE 
+                (LOWER(p.name) LIKE LOWER(:keyword) OR LOWER(p.description) LIKE LOWER(:keyword))
+                AND p.status = 'approved'
+                AND ps.availability_status = 'in-stock'
+        `;
+
+        const [products] = await sequelize.query(query, {
+            replacements: { keyword: `%${keyword}%` },
+            type: Sequelize.QueryTypes.SELECT
+        });
+
+        return res.status(200).json({
+            success: true,
+            products
+        });
+    }catch(error){
+        console.error("Error in searching the products using Keywords: ", error.message);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to serach your products"
+        });
+    }
+};
+
