@@ -14,7 +14,8 @@ const ProductStock = sequelize.define('ProductStock', {
         references: { 
             model: 'product', 
             key: 'product_id' 
-        } 
+        },
+        onDelete: 'CASCADE'
     },
     stock: { 
         type: DataTypes.INTEGER, 
