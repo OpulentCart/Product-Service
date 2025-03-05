@@ -341,5 +341,21 @@ exports.getAllProductsBySubCategoryForCustomers = async (req, res) => {
 };
 
 exports.deleteProduct = async (req, res) => {
+    try {
+        const { id } = req.params; 
 
+        // Check if the product exists
+        const product = await Product.findOne({ where: { product_id: id } });
+        if (!product) {
+            return res.status(404).json({ success: false, message: "Product not found" });
+        }
+
+        // Delete the product
+        await Product.destroy({ where: { product_id: id } });
+
+        return res.status(200).json({ success: true, message: "Product deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting product:", error.message);
+        res.status(500).json({ success: false, error: error.message });
+    }
 };
