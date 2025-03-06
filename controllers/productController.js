@@ -399,3 +399,34 @@ exports.searchProducts = async(req, res) => {
     }
 };
 
+exports.updateProductDetails = async(req, res) => {
+    try{
+        const { id } = req.params;
+        const { name, brand, price, description  } = req.body;
+
+        const product = await Product.findByPk(id);
+        if (!product) {
+            return res.status(404).json({ success: false, message: "Product not found" });
+        }
+
+        // Update product details
+        await product.update({
+            name: name || product.name,
+            brand: brand || product.brand,
+            price: price || product.price,
+            description: description || product.description
+        });
+        
+        return res.status(200).json({
+            success: true,
+            message: "Product updated successfully",
+            data: product,
+        });
+    }catch(error){
+        console.error("Error in updating the product details: ", error.message);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to update the product"
+        });
+    }
+}

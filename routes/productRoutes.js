@@ -16,5 +16,6 @@ router.get('/customers/category/:id', productController.getAllProductsByCategory
 router.get('/customers/sub_category/:id', productController.getAllProductsBySubCategoryForCustomers);
 router.delete('/:id', authenticateUser, authorizeRole('vendor'), productController.deleteProduct);
 router.get('/search/:keyword', productController.searchProducts);
+router.put('/details/:id', authenticateUser, authorizeRole('vendor'), productController.updateProductDetails);
 
 module.exports = router;
