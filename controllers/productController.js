@@ -402,7 +402,7 @@ exports.searchProducts = async(req, res) => {
 exports.updateProductDetails = async(req, res) => {
     try{
         const { id } = req.params;
-        const { name, brand, price, description  } = req.body;
+        const { brand, description, name, price  } = req.body;
 
         const product = await Product.findByPk(id);
         if (!product) {
@@ -416,7 +416,7 @@ exports.updateProductDetails = async(req, res) => {
             price: price || product.price,
             description: description || product.description
         });
-        
+
         return res.status(200).json({
             success: true,
             message: "Product updated successfully",
